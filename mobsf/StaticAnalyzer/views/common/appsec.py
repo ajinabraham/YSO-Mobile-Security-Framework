@@ -5,6 +5,7 @@ Shared Functions.
 AppSec Dashboard
 """
 import logging
+import math
 
 from django.shortcuts import render
 
@@ -189,17 +190,16 @@ def common_fields(findings, data):
     high = len(findings.get('high'))
     warn = len(findings.get('warning'))
     sec = len(findings.get('secure'))
-    total = high + warn + sec
-    score = 0
-    if total > 0:
-        score = int(100 - (
-            ((high * 1) + (warn * .5) - (sec * .2)) / total) * 100)
-    if score > 100:
-        score = 100
-    findings['security_score'] = score
+    findings['security_score'] = get_secure_score(high, warn, sec)
     findings['app_name'] = data.get('app_name', '')
     findings['file_name'] = data.get('file_name', '')
     findings['hash'] = data['md5']
+
+
+def get_secure_score(high, warn, sec):
+    loss_score = high * 10 + warn * 5  - sec * 2
+    normalize_reverse = 2 / (1 + pow(math.e, loss_score / 30))
+    return int(min(normalize_reverse, 1) * 100)
 
 
 def get_android_dashboard(context, from_ctx=False):
