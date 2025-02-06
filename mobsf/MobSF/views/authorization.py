@@ -49,8 +49,8 @@ class Permissions(Enum):
     DELETE = f'StaticAnalyzer.{PERM_CAN_DELETE}'
 
 
-MAINTAINER_GROUP = settings.IDP_MAINTAINER_GROUP
-VIEWER_GROUP = settings.IDP_VIEWER_GROUP
+MAINTAINER_GROUP = 'Maintainer'
+VIEWER_GROUP = 'Viewer'
 
 
 def permission_required(perm):

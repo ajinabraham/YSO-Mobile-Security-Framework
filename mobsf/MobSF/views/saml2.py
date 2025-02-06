@@ -127,10 +127,19 @@ def get_redirect_url(req):
 
 def get_user_role(roles):
     """Get user role."""
-    mrole = any(MAINTAINER_GROUP.lower() in gp.lower() for gp in roles)
-    if mrole:
+    maintainer_groups = [g.lower() for g in settings.IDP_MAINTAINER_GROUP]
+    viewer_groups = [g.lower() for g in settings.IDP_VIEWER_GROUP]
+    user_roles = [gp.lower() for gp in roles]
+    mrole = any(gp in maintainer_groups for gp in user_roles)
+    vrole = any(gp in viewer_groups for gp in user_roles)
+    if mrole or settings.IDP_MOBSF_DEFAULT_GROUP == 'Maintainer':
+        logger.info('User assigned to %s group.', MAINTAINER_GROUP)
         return MAINTAINER_GROUP
-    return VIEWER_GROUP
+    elif vrole or settings.IDP_MOBSF_DEFAULT_GROUP == 'Viewer':
+        logger.info('User assigned to %s group.', VIEWER_GROUP)
+        return VIEWER_GROUP
+    logger.warning('User does not have an authorized SSO group.')
+    return None
 
 
 @require_http_methods(['GET'])
@@ -174,6 +183,9 @@ def saml_acs(request):
                 'role attribute not found in SAML response.')
         email = attributes['email'][0]
         role = get_user_role(attributes['role'])
+        if not role:
+            raise Exception(
+                'You do not have an authorized SSO group.')
         if User.objects.filter(username=email).exists():
             user = User.objects.get(username=email)
             user.groups.clear()
