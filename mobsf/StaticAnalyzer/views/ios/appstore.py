@@ -5,10 +5,8 @@ import requests
 
 from django.conf import settings
 
-from mobsf.MobSF.utils import (
-    append_scan_status,
-    upstream_proxy,
-)
+from mobsf.MobSF.utils import append_scan_status
+from mobsf.MobSF.proxy import upstream_proxy
 
 logger = logging.getLogger(__name__)
 

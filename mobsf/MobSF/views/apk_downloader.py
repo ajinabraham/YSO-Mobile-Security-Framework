@@ -15,12 +15,12 @@ from mobsf.MobSF.views.scanning import (
     add_to_recent_scan,
     handle_uploaded_file,
 )
+from mobsf.MobSF.proxy import upstream_proxy
 from mobsf.MobSF.utils import (
     is_internet_available,
     is_path_traversal,
     is_zip_magic,
     strict_package_check,
-    upstream_proxy,
 )
 
 

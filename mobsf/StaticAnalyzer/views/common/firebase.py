@@ -4,9 +4,9 @@ from urllib.parse import urlparse
 
 from mobsf.MobSF.utils import (
     append_scan_status,
-    upstream_proxy,
     valid_host,
 )
+from mobsf.MobSF.proxy import upstream_proxy
 
 import requests
 

@@ -4,13 +4,17 @@ import shutil
 import tempfile
 import zipfile
 import platform
+import ssl
 from pathlib import Path
 from urllib.request import (
+    HTTPSHandler,
     ProxyHandler,
     Request,
     build_opener,
     getproxies,
 )
+
+from mobsf.MobSF.proxy import upstream_proxy
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,9 +26,17 @@ logger = logging.getLogger(__name__)
 def download_file(url, file_path):
     req = Request(url)
     system_proxies = getproxies()
-    proxy_handler = ProxyHandler(system_proxies)
-    opener = build_opener(proxy_handler)
-
+    if system_proxies:
+        proxies = system_proxies
+    else:
+        proxies, verify = upstream_proxy('https', for_urllib=True)
+    proxy_handler = ProxyHandler(proxies)
+    if verify:
+        ssl_context = ssl.create_default_context()
+    else:
+        ssl_context = ssl._create_unverified_context()
+    https_handler = HTTPSHandler(context=ssl_context)
+    opener = build_opener(proxy_handler, https_handler)
     with opener.open(req) as response:
         if response.status == 200:
             file_size = int(response.headers.get('Content-Length', 0))

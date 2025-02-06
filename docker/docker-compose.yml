@@ -73,6 +73,12 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - MOBSF_ASYNC_ANALYSIS=1
+    #Proxy options - use it if you behind proxy
+      #- MOBSF_UPSTREAM_PROXY_ENABLED=True  
+      #- MOBSF_UPSTREAM_PROXY_SSL_VERIFY=True
+      #- MOBSF_UPSTREAM_PROXY_TYPE=http
+      #- MOBSF_UPSTREAM_PROXY_IP=host.docker.internal
+      #- MOBSF_UPSTREAM_PROXY_PORT=8080
     healthcheck:
       test: curl -f http://localhost:8000/login/ || exit 1
       interval: 30s

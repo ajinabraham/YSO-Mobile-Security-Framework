@@ -138,6 +138,7 @@ GITHUB_URL = ('https://github.com/MobSF/Mobile-Security-Framework-MobSF/'
               'releases/latest')
 FRIDA_SERVER = 'https://api.github.com/repos/frida/frida/releases/tags/'
 GOOGLE = 'https://www.google.com'
+PLAYSTORE = 'https://play.google.com'
 BAIDU = 'https://www.baidu.com/'
 APKPURE = 'https://m.apkpure.com/android/{}/download?from=details'
 APKTADA = 'https://apktada.com/download-apk/'

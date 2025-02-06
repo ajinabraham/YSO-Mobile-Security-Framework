@@ -10,11 +10,11 @@ import requests
 
 from django.conf import settings
 
+from mobsf.MobSF.proxy import upstream_proxy
 from mobsf.MobSF.utils import (
     find_java_binary,
     is_file_exists,
     is_internet_available,
-    upstream_proxy,
 )
 
 

@@ -9,10 +9,8 @@ import requests
 
 from django.conf import settings
 
-from mobsf.MobSF.utils import (
-    is_internet_available,
-    upstream_proxy,
-)
+from mobsf.MobSF.utils import is_internet_available
+from mobsf.MobSF.proxy import upstream_proxy
 
 
 logger = logging.getLogger(__name__)
@@ -30,7 +28,7 @@ def clean_up_old_binaries(dirc, version):
                 pass
 
 
-def download_frida_server(url, version, fname, proxies):
+def download_frida_server(url, version, fname, proxies, verify):
     """Download frida-server-binary."""
     try:
         download_dir = Path(settings.DWD_DIR)
@@ -40,6 +38,7 @@ def download_frida_server(url, version, fname, proxies):
                 url,
                 timeout=5,
                 proxies=proxies,
+                verify=verify,
                 stream=True) as r:
             with LZMAFile(r.raw) as f:
                 with open(dwd_loc, 'wb') as flip:
@@ -72,7 +71,7 @@ def update_frida_server(arch, version):
         for item in response.json()['assets']:
             if item['name'] == f'{fserver}.xz':
                 url = item['browser_download_url']
-                return download_frida_server(url, version, fserver, proxies)
+                return download_frida_server(url, version, fserver, proxies, verify)
         return False
     except Exception:
         logger.exception('[ERROR] Fetching Frida Server Release')

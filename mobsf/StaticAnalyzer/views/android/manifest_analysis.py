@@ -9,9 +9,11 @@ from concurrent.futures import ThreadPoolExecutor
 from mobsf.MobSF.utils import (
     append_scan_status,
     is_number,
-    upstream_proxy,
     valid_host,
 )
+
+from mobsf.MobSF.proxy import upstream_proxy
+
 from mobsf.StaticAnalyzer.views.android import (
     network_security,
 )
